@@ -10,7 +10,10 @@ import {
   Map,
   CheckCircle2,
   Mail,
-  Smartphone
+  Smartphone,
+  Box,
+  FileText,
+  ExternalLink
 } from "lucide-react";
 
 // 簡約的區塊組件，模擬 Google 協作平台
@@ -33,6 +36,29 @@ const SkillItem = ({ label, level }: { label: string; level?: string }) => (
 );
 
 export default function App() {
+  const [activeDocIndex, setActiveDocIndex] = React.useState(0);
+
+  const driveDocs = [
+    {
+      title: "作業檔案一",
+      url: "https://drive.google.com/file/d/1Gww96BuSqYGzRcOJayOwm0d-iU3AnTBJ/view",
+      previewUrl: "https://drive.google.com/file/d/1Gww96BuSqYGzRcOJayOwm0d-iU3AnTBJ/preview",
+      description: "這是發佈於 Google 雲端硬碟的專案報告與作業附件一。您可以在下方直接檢視完整檔案。"
+    },
+    {
+      title: "作業檔案二",
+      url: "https://drive.google.com/file/d/1xeOibub_WoNVLGGrr06CmFq0r7dckqU3/view",
+      previewUrl: "https://drive.google.com/file/d/1xeOibub_WoNVLGGrr06CmFq0r7dckqU3/preview",
+      description: "這是發佈於 Google 雲端硬碟的專案報告與作業附件二。您可以在下方直接檢視完整檔案。"
+    },
+    {
+      title: "作業檔案三",
+      url: "https://drive.google.com/file/d/1q1D6911-RysvFwBfgQOdPFC6cbesMIkU/view",
+      previewUrl: "https://drive.google.com/file/d/1q1D6911-RysvFwBfgQOdPFC6cbesMIkU/preview",
+      description: "這是發佈於 Google 雲端硬碟的專案報告與作業附件三。您可以在下方直接檢視完整檔案。"
+    }
+  ];
+
   return (
     <div className="bg-white min-h-screen font-sans">
       {/* 導覽列 */}
@@ -42,8 +68,8 @@ export default function App() {
           <div className="hidden md:flex gap-6 text-sm font-medium text-gray-500">
             <a href="#about" className="hover:text-blue-600 transition-colors">關於我</a>
             <a href="#experience" className="hover:text-blue-600 transition-colors">工作經歷</a>
-            <a href="#travel" className="hover:text-blue-600 transition-colors">旅遊</a>
             <a href="#projects" className="hover:text-blue-600 transition-colors">作業專區</a>
+            <a href="#3d-model" className="hover:text-blue-600 transition-colors">立體模型</a>
             <a href="#skills" className="hover:text-blue-600 transition-colors">專業技能</a>
             <a href="#bio" className="hover:text-blue-600 transition-colors">自傳</a>
           </div>
@@ -95,29 +121,17 @@ export default function App() {
           <h2 className="text-3xl font-bold border-b-2 border-blue-600 inline-block mb-8">工作經歷</h2>
           <div className="space-y-12">
             <div className="flex flex-col md:flex-row gap-4 md:gap-12">
+              <div className="md:w-1/3 text-xl font-bold text-blue-600">2024 ~ 現在</div>
+              <div className="md:w-2/3">
+                <h3 className="text-2xl font-bold mb-2">全家坐牢</h3>
+                <p className="text-gray-600">讓我體驗196是多麼美好的數字</p>
+              </div>
+            </div>
+            <div className="flex flex-col md:flex-row gap-4 md:gap-12">
               <div className="md:w-1/3 text-xl font-bold text-blue-600">2025-05 ~ 2025-06</div>
               <div className="md:w-2/3">
                 <h3 className="text-2xl font-bold mb-2">御風輪實習 (日本 東京)</h3>
                 <p className="text-gray-600">海上實習 難得的體驗 更了解在船工作在幹嘛</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* 旅遊 */}
-        <section id="travel">
-          <h2 className="text-3xl font-bold border-b-2 border-blue-600 inline-block mb-8">旅遊</h2>
-          <div className="space-y-8">
-            <div className="flex flex-col md:flex-row gap-4 md:gap-12">
-              <div className="md:w-1/3 text-xl font-bold text-blue-600">2026-01</div>
-              <div className="md:w-2/3">
-                <h3 className="text-2xl font-bold mb-2">澳門</h3>
-              </div>
-            </div>
-            <div className="flex flex-col md:flex-row gap-4 md:gap-12">
-              <div className="md:w-1/3 text-xl font-bold text-blue-600">2026-03</div>
-              <div className="md:w-2/3">
-                <h3 className="text-2xl font-bold mb-2">首爾</h3>
               </div>
             </div>
           </div>
@@ -234,6 +248,97 @@ export default function App() {
               </div>
             </div>
           </div>
+
+          {/* 雲端作業檔案 */}
+          <div className="mt-12 bg-white rounded-[2rem] border border-gray-100 shadow-lg overflow-hidden">
+            {/* 作業檔案選擇切換器 */}
+            <div className="p-6 bg-gray-50/50 border-b border-gray-100 flex flex-wrap gap-2 items-center">
+              <span className="text-sm font-semibold text-gray-500 mr-2">切換作業檔案：</span>
+              <div className="flex flex-wrap gap-2">
+                {driveDocs.map((doc, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setActiveDocIndex(index)}
+                    className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer ${
+                      activeDocIndex === index
+                        ? "bg-blue-600 text-white shadow-md shadow-blue-200"
+                        : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:text-blue-600"
+                    }`}
+                  >
+                    {doc.title}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="p-8 md:p-12 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+                  <FileText className="text-blue-600" size={28} />
+                  行銷與專業報告作業檔案 - {driveDocs[activeDocIndex].title}
+                </h3>
+                <p className="text-gray-600">
+                  {driveDocs[activeDocIndex].description} 您可以在下方直接滾動與檢視完整的檔案內容，或點擊右側按鈕在新分頁開啟。
+                </p>
+              </div>
+              <a 
+                href={driveDocs[activeDocIndex].url}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center bg-blue-600 text-white font-semibold px-6 py-3 rounded-xl hover:bg-blue-700 transition shadow-sm hover:shadow-md shrink-0 gap-2"
+              >
+                <ExternalLink size={18} />
+                在新分頁開啟檔案
+              </a>
+            </div>
+            
+            <div className="relative w-full bg-gray-100 h-[600px]">
+              <iframe
+                key={activeDocIndex} // Force reload of iframe when selection changes
+                src={driveDocs[activeDocIndex].previewUrl}
+                className="absolute inset-0 w-full h-full border-0"
+                allow="autoplay"
+                title={`Google Drive Document - ${driveDocs[activeDocIndex].title}`}
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* 立體模型 */}
+        <section id="3d-model">
+          <h2 className="text-3xl font-bold border-b-2 border-blue-600 inline-block mb-8">立體模型</h2>
+          <div className="bg-white rounded-[2rem] border border-gray-100 shadow-lg overflow-hidden">
+            <div className="p-8 md:p-12 border-b border-gray-100 bg-gray-50/50 flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+                  <Box className="text-blue-600" size={28} />
+                  3D 數位藝術展示
+                </h3>
+                <p className="text-gray-600">
+                  使用先進生成式 3D 技術（Tripo3D AI）建立的立體模型。您可以在下方直接旋轉、縮放與拖曳，以全方位視角進行三維觀看與探索。
+                </p>
+              </div>
+              <a 
+                href="https://studio.tripo3d.ai/3d-model/b5345719-2b38-4dd1-b077-6ee1cb4cafb2?invite_code=HF6UKF"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center bg-blue-600 text-white font-semibold px-6 py-3 rounded-xl hover:bg-blue-700 transition shadow-sm hover:shadow-md shrink-0 gap-2"
+              >
+                <Globe size={18} />
+                在 Tripo 平台開啟
+              </a>
+            </div>
+            <div className="relative aspect-video w-full bg-gray-900 min-h-[450px]">
+              <iframe
+                src="https://studio.tripo3d.ai/3d-model/b5345719-2b38-4dd1-b077-6ee1cb4cafb2?invite_code=HF6UKF"
+                className="absolute inset-0 w-full h-full border-0"
+                allow="fullscreen; autoplay; vr; xr; xr-spatial-tracking"
+                title="Tripo3D 3D Model"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          </div>
         </section>
 
         {/* 技能能力 */}
@@ -241,7 +346,7 @@ export default function App() {
           <div>
             <h2 className="text-2xl font-bold border-b-2 border-blue-600 inline-block mb-6">專業技能</h2>
             <div className="flex flex-wrap gap-2">
-              {["顧客關係管理", "品牌行銷", "電商管理", "CRM"].map(s => (
+              {["飛行空中巴士客機"].map(s => (
                 <span key={s} className="px-4 py-2 bg-gray-100 rounded-lg text-sm font-medium">{s}</span>
               ))}
             </div>
@@ -280,6 +385,9 @@ export default function App() {
             <ul className="space-y-2 text-gray-700">
               <li className="flex items-center gap-2"><CheckCircle2 size={16} /> 基本安全訓練</li>
               <li className="flex items-center gap-2"><CheckCircle2 size={16} /> 進階滅火</li>
+              <li className="flex items-center gap-2"><CheckCircle2 size={16} /> ARPA</li>
+              <li className="flex items-center gap-2"><CheckCircle2 size={16} /> 航行安全</li>
+              <li className="flex items-center gap-2"><CheckCircle2 size={16} /> 醫療急救</li>
             </ul>
           </div>
           <div>
